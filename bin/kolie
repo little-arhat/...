@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+import sys
+
+rest = sys.argv[1]
+if '.' in rest:
+    (module_name, rest) = rest.split('.', 1)
+    module = __import__(module_name)
+else:
+    module = __builtins__
+
+while '.' in rest:
+    (module_name, rest) = rest.split('.' , 1)
+    module = getattr(module, module_name)
+
+func = getattr(module, rest)
+
+if len(sys.argv) > 2:
+    src = sys.argv[2].strip()
+else:
+    src = sys.stdin.read().strip()
+
+print(src)
+print(src.count.)
+
+def is_number(s):
+    if s.isdigit():
+        return True
+    elif s.count('.') == 1:
+        parts = s.split('.', 2)
+        return parts[0].isdigit() and parts[1].isdigit()
+    else:
+        return False
+
+if is_number(src):
+    src = float(src)
+elif src.count(r'\n') > 0:
+    src = (float(l) if is_number(src) else l for l in src.split(r'\n'))
+
+if src:
+    print(func(src))
+else:
+    print(func())

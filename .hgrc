@@ -1,0 +1,33 @@
+
+[ui]
+username = Roman Sokolov <sokolov.r.v@gmail.com>
+
+[extensions]
+hgext.graphlog =
+fetch =
+hgext.purge =
+hgext.patchbomb =
+
+[email]
+method = smtp
+from = Roman Sokolov <sokolov.r.v@gmail.com>
+cc =
+bcc =
+
+[smtp]
+host = smtp.gmail.com
+port = 587
+tls = true
+username = sokolov.r.v@gmail.com
+
+[alias]
+latest = log -l 5
+rlog = log -r:
+_myst = status
+st = !hg _myst $(hg root)
+sst = _myst
+conflicted = resolve --list
+mark = resolve -m
+unresolved = !hg resolve --list | gawk '{ print $$1=="R"?"":$$2 }' | grep -ve "^$"
+blog = log -l$1
+sample = !echo $$$1

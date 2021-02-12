@@ -1,0 +1,10 @@
+# local settings
+
+PS1="($wc%n$n@$pc%m $wc%~$n)$rc>>=$n "
+
+export PATH=/Users/r/.brew/bin:/Users/r/.cargo/bin/rg:/Users/r/.brew/opt/texinfo/bin:$PATH
+
+source "$HOME/.cargo/env"
+
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_AUTO_UPDATE=1
