@@ -382,6 +382,8 @@ function git-touche() {
     git log --name-only --pretty=format:%n --grep="$1" | sort -u
 }
 
+alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
 # local specific aliases and settings
 # local settings can override some settings
 if [ -f ~/.zshlocal ]; then

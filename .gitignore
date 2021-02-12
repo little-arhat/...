@@ -246,3 +246,4 @@ arm-eabi
 .conda
 .emacs.d/packages/telega
 .telega
+.dotfiles
