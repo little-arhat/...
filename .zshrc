@@ -386,8 +386,8 @@ alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # local specific aliases and settings
 # local settings can override some settings
-if [ -f ~/.zshlocal ]; then
-    source ~/.zshlocal
+if [ -f ~/.zshenv ]; then
+    source ~/.zshenv
 fi
 
 # for emacs' tramp
