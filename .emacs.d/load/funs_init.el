@@ -278,3 +278,16 @@ This takes a numeric prefix argument; when not 1, it behaves exactly like
   (interactive (list (deadgrep--read-search-term)))
   (let ((deadgrep-project-root-function #'projectile-project-root))
     (deadgrep search-term)))
+
+;;; (C) banister (John Mair)
+;;; slightly patched by me ^_^
+;;; http://github.com/banister/window-rotate-for-emacs
+(defun rotate-windows-helper(x d)
+  (if (equal (cdr x) nil) (set-window-buffer (car x) d)
+    (set-window-buffer (car x) (window-buffer (cadr x))) (rotate-windows-helper (cdr x) d)))
+
+(defun rotate-windows ()
+  (interactive)
+  (rotate-windows-helper (window-list)
+                         (window-buffer
+                          (car (window-list)))))

@@ -3,12 +3,15 @@
 (when nix
   (set-selection-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (setq
-   x-select-enable-clipboard t
-   x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
-   interprogram-paste-function (quote x-cut-buffer-or-selection-value)
-   ))
+  (set-keyboard-coding-system 'utf-8))
+
+;; This works for copying, but not pasting for some reason
+(setq select-enable-clipboard t)
+
+;; Whatever... it's easy enough to implement that part ourselves
+(setq interprogram-paste-function
+      (lambda ()
+        (shell-command-to-string "pbpaste")))
 
 ;; I like having unix lineendings even on windows
 (prefer-coding-system 'utf-8-unix)

@@ -45,6 +45,7 @@
       (setq solarized-height-plus-2 1.0)
       (setq solarized-height-plus-3 1.0)
       (setq solarized-height-plus-4 1.0)
+      (setq mac-command-modifier 'hyper)
       (set-face-attribute 'default nil
                           :family "Fira Code"
                           :height 180

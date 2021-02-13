@@ -338,3 +338,18 @@
 
 (use-package solarized-theme
   :ensure t)
+
+(use-package company
+  :ensure t)
+
+(use-package telega
+  :ensure t
+  :bind-keymap ("C-c t" . telega-prefix-map)
+  :commands (telega)
+  :config
+  (use-package telega-mnz)
+  (add-hook 'telega-load-hook 'global-telega-squash-message-mode)
+  (add-hook 'telega-load-hook 'global-telega-mnz-mode)
+  (add-hook 'telega-load-hook 'company-mode)
+  (setq telega-vvnote-video-cmd
+        "ffmpeg -f avfoundation -s 640x480 -framerate 30 -i default -r 30 -f avfoundation -i :default -vf format=yuv420p,crop=240:240:240:0 -vcodec hevc -vb 300k -strict -2 -acodec opus -ac 1 -ab 32k"))

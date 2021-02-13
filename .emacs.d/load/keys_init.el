@@ -43,25 +43,25 @@
 (global-set-key (kbd "<right>")  'windmove-right)
 
 (global-set-key (kbd "C-q C-q") 'rotate-windows)
-(global-set-key (kbd "C-x C-l") 'bs-show)
+(global-set-key (kbd "C-q C-f") 'toggle-frame-fullscreen)
+(global-set-key (kbd "H-f") 'toggle-frame-fullscreen)
+(global-set-key (kbd "C-q C-t") 'toggle-frame-maximized)
+(global-set-key (kbd "H-m") 'toggle-frame-maximized)
 (global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
 
 ;; comments
 (global-set-key (kbd "C-c C-o") 'comment-region)
-;; need this for compatibility with go-oracle
-(global-set-key (kbd "C-x C-o") 'comment-region)
 (global-set-key (kbd "C-c C-y") 'uncomment-region)
 
 ;; misc
 (global-set-key (kbd "C-c \"") 'insert-quotes)
-
 (global-set-key (kbd "C-c C-c") 'compile)
 
 
-(global-set-key (kbd "C-c C-k") 'my-pbcopy)
-
-
-(global-set-key (kbd "C-c C-p") 'my-pbpaste)
+(global-set-key (kbd "C-M-c") 'my-pbcopy)
+(global-set-key (kbd "C-M-v") 'my-pbpaste)
+(global-set-key (kbd "H-c") 'my-pbcopy)
+(global-set-key (kbd "H-v") 'my-pbpaste)
 
 (global-set-key (kbd "C-c C-s") 'search-from-clipboard)
 

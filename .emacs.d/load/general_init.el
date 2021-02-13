@@ -76,3 +76,13 @@
 (if (eq system-type 'darwin)
     (setq ns-extended-platform-support-mode t
           ns-command-modifier 'meta))
+
+;; from https://github.com/purcell/exec-path-from-shell/blob/master/exec-path-from-shell.el
+(defun exec-path-from-shell-setenv (value)
+  "Set the value of environment var PATH to VALUE.
+Also update the variables `exec-path' and `eshell-path-env'."
+  (setenv "PATH" value)
+  (setq exec-path (append (parse-colon-path value) (list exec-directory)))
+  (setq-default eshell-path-env value))
+(if (display-graphic-p)
+    (exec-path-from-shell-setenv (shell-command-to-string "zsh -c 'echo $PATH'")))
