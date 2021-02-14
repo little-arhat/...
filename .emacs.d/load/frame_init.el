@@ -46,6 +46,7 @@
       (setq solarized-height-plus-3 1.0)
       (setq solarized-height-plus-4 1.0)
       (setq mac-command-modifier 'hyper)
+      (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji"))
       (set-face-attribute 'default nil
                           :family "Fira Code"
                           :height 180

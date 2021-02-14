@@ -1,4 +1,4 @@
-
+;;
 ;; org mode
 (use-package org
   :bind (:map org-mode-map
@@ -342,14 +342,28 @@
 (use-package company
   :ensure t)
 
+(use-package kill-ring-search
+  :ensure t)
+
 (use-package telega
   :ensure t
   :bind-keymap ("C-c t" . telega-prefix-map)
   :commands (telega)
   :config
   (use-package telega-mnz)
+  (defun my-telega-chat-mode ()
+    (set (make-local-variable 'company-backends)
+         (append (list telega-emoji-company-backend
+                       'telega-company-username
+                       'telega-company-hashtag)
+                 (when (telega-chat-bot-p telega-chatbuf--chat)
+                   '(telega-company-botcmd))))
+    (company-mode 1))
+  (add-hook 'telega-chat-mode-hook 'my-telega-chat-mode)
   (add-hook 'telega-load-hook 'global-telega-squash-message-mode)
   (add-hook 'telega-load-hook 'global-telega-mnz-mode)
-  (add-hook 'telega-load-hook 'company-mode)
+  (setq telega-emoji-use-images nil)
+  (setq telega-open-file-function 'browse-url-default-macosx-browser)
+  (setq telega-open-message-as-file '(video audio video-note voice-note))
   (setq telega-vvnote-video-cmd
-        "ffmpeg -f avfoundation -s 640x480 -framerate 30 -i default -r 30 -f avfoundation -i :default -vf format=yuv420p,crop=240:240:240:0 -vcodec hevc -vb 300k -strict -2 -acodec opus -ac 1 -ab 32k"))
+        "ffmpeg -f avfoundation -s 640x480 -framerate 30 -i default -r 30 -f avfoundation -i :default -vf format=yuv420p,crop=240:240:240:40 -vcodec hevc -vb 300k -strict -2 -acodec opus -ac 1 -ab 32k"))

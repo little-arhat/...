@@ -24,6 +24,7 @@
 (global-set-key (kbd "M-Y") (lambda (&optional arg)
                               (interactive "*p")
                               (yank-pop (- arg))))
+
 (autoload 'kill-ring-search "kill-ring-search"
   "Search the kill ring in the minibuffer."
   (interactive))
