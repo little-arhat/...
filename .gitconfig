@@ -1,6 +1,8 @@
 [user]
     name = Roma Sokolov
     email = sokolov.r.v@gmail.com
+[includeIf "gitdir:~/prj/w/"]
+  path = .gitconfig-work
 [alias]
     ci = commit
     st = status -s
@@ -29,3 +31,5 @@
     conflicts = diff --name-only --diff-filter=U
     stup = !git stash && git up && git stash pop
     change-commits = "!f() { VAR=$1; OLD=$2; NEW=$3; shift 3; git filter-branch --env-filter \"if [[ \\\"$`echo $VAR`\\\" = '$OLD' ]]; then export $VAR='$NEW'; fi\" $@; }; f "
+    mylog = log --author='Roma Sokolov'
+    myshort = shortlog --author='Roma Sokolov'
