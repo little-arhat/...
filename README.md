@@ -38,5 +38,12 @@ Please move or remove them before you can switch branches.
 Aborting
 ```
 
+Configure your repo:
+
+```
+config config --local status.showUntrackedFiles no
+```
+
+
 Remove or backup files and repeat.
 https://www.atlassian.com/git/tutorials/dotfiles
