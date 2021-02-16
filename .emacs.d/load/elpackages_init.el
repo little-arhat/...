@@ -368,5 +368,7 @@
   (setq telega-open-message-as-file '(video audio video-note voice-note))
   (setq telega-chat-send-disable-webpage-preview t)
   (setq telega-chat-fill-column 100)
+  (setq scroll-margin 3)
+  (setq telega-root-default-view-function 'telega-view-two-lines)
   (setq telega-vvnote-video-cmd
         "ffmpeg -f avfoundation -s 640x480 -framerate 30 -i default -r 30 -f avfoundation -i :default -vf format=yuv420p,crop=240:240:240:40 -vcodec hevc -vb 300k -strict -2 -acodec opus -ac 1 -ab 32k"))

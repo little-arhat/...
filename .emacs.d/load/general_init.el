@@ -26,7 +26,7 @@
  echo-keystrokes 0.01                ;; see what you type
  scroll-conservatively 15            ;; text scrolling
  scroll-preserve-screen-position t
- scroll-margin 10
+ scroll-margin 6
  scroll-step 1                       ;; Scroll by one line at a time
  comint-completion-addsuffix t       ;; Insert space/slash after completion
  kill-whole-line t                   ;; delete line in one stage
