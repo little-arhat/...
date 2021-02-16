@@ -362,9 +362,11 @@
   (add-hook 'telega-chat-mode-hook 'my-telega-chat-mode)
   (add-hook 'telega-load-hook 'global-telega-squash-message-mode)
   (add-hook 'telega-load-hook 'global-telega-mnz-mode)
+  (advice-add 'telega-ins--webpage :around 'ignore)
   (setq telega-emoji-use-images nil)
   (setq telega-open-file-function 'browse-url-default-macosx-browser)
   (setq telega-open-message-as-file '(video audio video-note voice-note))
   (setq telega-chat-send-disable-webpage-preview t)
+  (setq telega-chat-fill-column 100)
   (setq telega-vvnote-video-cmd
         "ffmpeg -f avfoundation -s 640x480 -framerate 30 -i default -r 30 -f avfoundation -i :default -vf format=yuv420p,crop=240:240:240:40 -vcodec hevc -vb 300k -strict -2 -acodec opus -ac 1 -ab 32k"))
