@@ -331,6 +331,7 @@ alias sd="screen -D -r"
 alias l=$PAGER
 alias g="egrep -i --color -n"
 alias ag="rg -i"
+alias f="fd -H --no-ignore"
 function gr() { egrep -i --color -r $1 . }
 alias h="head"
 alias p="ping"
