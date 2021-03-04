@@ -368,14 +368,12 @@
 
   (setq telega-emoji-use-images nil)
 
-  (setq telega-ins-webpage-display-media nil)
-  (setq telega-ins-webpage-display-sitename nil)
-  (setq telega-ins-webpage-description-size-limit 256)
-
+  (setq telega-webpage-preview-size-limits nil)
+  (setq telega-webpage-preview-description-limit 256)
   (setq telega-open-file-function 'browse-url-default-macosx-browser)
   (setq telega-open-message-as-file '(video audio video-note voice-note))
   (setq telega-chat-send-disable-webpage-preview t)
-  (setq telega-chat-fill-column 100)
+  (setq telega-chat-fill-column 90)
   (setq scroll-margin 3)
   (setq telega-root-default-view-function 'telega-view-two-lines)
   (setq telega-vvnote-video-cmd
