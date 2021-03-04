@@ -63,6 +63,7 @@
   :init
   (dolist (hook '(python-mode-hook
                   emacs-lisp-mode-hook
+                  rust-mode-hook
                   clojure-mode-hook))
     (add-hook hook 'highlight-parentheses-mode)))
 
@@ -179,7 +180,9 @@
   (setq indent-tabs-mode nil)
   :bind (:map rust-mode-map
               ("C-c C-c" . rust-run))
-  :config  (use-package lsp-rust
+  :config
+  (add-hook 'rust-mode-hook 'smartparens-mode)
+  (use-package lsp-rust
              :ensure lsp-mode
              :bind
              (("M-c" . lsp-extend-selection)
@@ -362,8 +365,13 @@
   (add-hook 'telega-chat-mode-hook 'my-telega-chat-mode)
   (add-hook 'telega-load-hook 'global-telega-squash-message-mode)
   (add-hook 'telega-load-hook 'global-telega-mnz-mode)
-  (advice-add 'telega-ins--webpage :around 'ignore)
+
   (setq telega-emoji-use-images nil)
+
+  (setq telega-ins-webpage-display-media nil)
+  (setq telega-ins-webpage-display-sitename nil)
+  (setq telega-ins-webpage-description-size-limit 256)
+
   (setq telega-open-file-function 'browse-url-default-macosx-browser)
   (setq telega-open-message-as-file '(video audio video-note voice-note))
   (setq telega-chat-send-disable-webpage-preview t)
