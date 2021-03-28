@@ -40,7 +40,10 @@
 
 (use-package flycheck
   :ensure t
-  :bind (("C-c C-x" . flycheck-next-error))
+  :bind (
+         ("C-c C-x" . flycheck-next-error)
+         ("C-c C-n" . flycheck-next-error) ; backup for cider
+         )
   :init
   (add-hook 'after-init-hook 'global-flycheck-mode))
 
@@ -87,6 +90,8 @@
           (yank whole-line-or-region-yank nil)))
   (whole-line-or-region-global-mode))
 
+(use-package lsp-clojure
+  :after (lsp-mode))
 
 (use-package clojure-mode
   :ensure t
@@ -96,6 +101,9 @@
   :init
   (setq clojure-indent-style :always-indent)
   (setq clojure-thread-all-but-last t)
+  (setq gc-cons-threshold (* 100 1024 1024))
+  (setq read-process-output-max (* 1024 1024))
+  (setq company-minimum-prefix-length 1)
   (setq clojure-align-forms-automatically t)
   (setq clojure-toplevel-inside-comment-form t))
 
@@ -103,9 +111,7 @@
   :ensure t
   :no-require t
   :commands cider-mode
-  :bind (:map cider-mode-map
-              ("C-c C-f" . nil)
-         :map cider-repl-mode-map
+  :bind (:map cider-repl-mode-map
               ("C-c M-r" . cider-repl-previous-matching-input)
               ("C-c M-s" . cider-repl-next-matching-input))
   :init
@@ -168,9 +174,21 @@
 
 (use-package lsp-mode
   :ensure t
-  :hook ((go-mode python-mode rust-mode java-mode scala-mode) . lsp-deferred)
-  :config
-  (setq lsp-auto-execute-action nil))
+  :hook ((go-mode . lsp-deferred)
+         (python-mode . lsp-deffered)
+         (rust-mode . lsp-deffered)
+         (java-mode . lsp-deffered)
+         (clojure-mode . lsp))
+  :init
+   (setq
+   lsp-headerline-breadcrumb-enable nil
+   lsp-enable-file-watchers t
+   lsp-signature-render-documentation nil
+   lsp-semantic-tokens-enable t
+   lsp-lens-enable t
+   lsp-completion-use-last-result nil
+   lsp-auto-execute-action nil
+   lsp-signature-auto-activate nil))
 
 ;; rust
 (use-package rust-mode
@@ -369,7 +387,7 @@
   (setq telega-emoji-use-images nil)
 
   (setq telega-webpage-preview-size-limits nil)
-  (setq telega-webpage-preview-description-limit 256)
+  (setq telega-webpage-preview-description-limit 64)
   (setq telega-open-file-function 'browse-url-default-macosx-browser)
   (setq telega-open-message-as-file '(video audio video-note voice-note))
   (setq telega-chat-send-disable-webpage-preview t)
