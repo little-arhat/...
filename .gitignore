@@ -242,7 +242,6 @@ Calibre Library
 .hdfscli.cfg
 .xargo
 arm-eabi
-.clojure
 .conda
 .emacs.d/packages/telega
 .telega

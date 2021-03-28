@@ -93,6 +93,9 @@
 (use-package lsp-clojure
   :after (lsp-mode))
 
+(use-package lsp-treemacs
+  :after (lsp-mode))
+
 (use-package clojure-mode
   :ensure t
   :commands put-clojure-indent
@@ -118,9 +121,10 @@
   (add-hook 'clojure-mode-hook 'cider-mode)
   (add-hook 'cider-repl-mode-hook 'smartparens-mode)
   :config
-  (setq cider-repl-history-file "~/.emacs.d/cider-history"
-        ;cider-cljs-repl "(do (require '[figwheel-sidecar.repl-api :as ra]) (ra/cljs-repl))"
-        cider-repl-display-help-banner nil))
+  (setq
+   cider-show-error-buffer nil
+   cider-repl-history-file "~/.emacs.d/cider-history"
+   cider-repl-display-help-banner nil))
 
 (use-package clj-refactor
   :ensure t
@@ -179,13 +183,15 @@
          (rust-mode . lsp-deffered)
          (java-mode . lsp-deffered)
          (clojure-mode . lsp))
+  :bind-keymap ("M-l" . lsp-command-map)
   :init
    (setq
    lsp-headerline-breadcrumb-enable nil
    lsp-enable-file-watchers t
+   lsp-file-watch-threshold 10000
    lsp-signature-render-documentation nil
-   lsp-semantic-tokens-enable t
-   lsp-lens-enable t
+   lsp-semantic-tokens-enable nil
+   lsp-lens-enable nil
    lsp-completion-use-last-result nil
    lsp-auto-execute-action nil
    lsp-signature-auto-activate nil))
