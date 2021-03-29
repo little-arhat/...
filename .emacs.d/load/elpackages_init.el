@@ -90,11 +90,11 @@
           (yank whole-line-or-region-yank nil)))
   (whole-line-or-region-global-mode))
 
-(use-package lsp-clojure
-  :after (lsp-mode))
+;; (use-package lsp-clojure
+;;   :after (lsp-mode))
 
-(use-package lsp-treemacs
-  :after (lsp-mode))
+;; (use-package lsp-treemacs
+;;   :after (lsp-mode))
 
 (use-package clojure-mode
   :ensure t
@@ -126,14 +126,6 @@
    cider-repl-history-file "~/.emacs.d/cider-history"
    cider-repl-display-help-banner nil))
 
-(use-package clj-refactor
-  :ensure t
-  :init
-  (add-hook 'clojure-mode-hook
-            '(lambda ()
-               (clj-refactor-mode 1)
-               (cljr-add-keybindings-with-prefix "C-c C-m"))))
-
 (use-package smartparens
   :ensure t
   :no-require t
@@ -154,8 +146,10 @@
               ("C-S-d" . sp-end-of-sexp)
               ("C-M-n" . sp-next-sexp)
               ("C-M-p" . sp-previous-sexp)
-              ("C-c (" . sp-add-to-next-sexp)
-              ("C-c )" . sp-add-to-previous-sexp)
+              ("C-c (" . sp-backward-slurp-sexp)
+              ("C-c )" . sp-forward-slurp-sexp)
+              ("M-)" . sp-forward-barf-sexp)
+              ("M-(" . sp-backward-barf-sexp)
               ("C-M-k" . sp-kill-sexp)
               ("C-k" . sp-kill-hybrid-sexp)
               ("C-M-w" . sp-copy-sexp)
@@ -164,9 +158,7 @@
               ("M-s" . sp-splice-sexp)
               ("M-c" . sp-copy-sexp)
               ("C-c c" . sp-comment))
-  :init
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+  )
 
 (use-package sql-indent
   :ensure t
@@ -182,7 +174,8 @@
          (python-mode . lsp-deffered)
          (rust-mode . lsp-deffered)
          (java-mode . lsp-deffered)
-         (clojure-mode . lsp))
+         ;; (clojure-mode . lsp)
+         )
   :bind-keymap ("M-l" . lsp-command-map)
   :init
    (setq
