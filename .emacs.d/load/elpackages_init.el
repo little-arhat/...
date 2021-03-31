@@ -142,8 +142,10 @@
               ("C-M-b" . sp-backward-sexp)
               ("C-M-d" . sp-down-sexp)
               ("C-M-e" . sp-up-sexp)
-              ("C-S-a" . sp-beginning-of-sexp)
-              ("C-S-d" . sp-end-of-sexp)
+              ("M-]" . sp-end-of-sexp)
+              ("M-[" . sp-beginning-of-sexp)
+              ("C-M-]" . sp-select-next-thing)
+              ("C-M-[" . sp-select-previous-thing)
               ("C-M-n" . sp-next-sexp)
               ("C-M-p" . sp-previous-sexp)
               ("C-c (" . sp-backward-slurp-sexp)
@@ -157,8 +159,7 @@
               ("M-<backspace>" . sp-backward-unwrap-sexp)
               ("M-s" . sp-splice-sexp)
               ("M-c" . sp-copy-sexp)
-              ("C-c c" . sp-comment))
-  )
+              ("C-c c" . sp-comment)))
 
 (use-package sql-indent
   :ensure t
