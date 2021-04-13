@@ -1,5 +1,6 @@
+;;; package -- summary
 
-;; org mode
+;; org mode.
 (use-package org
   :bind (:map org-mode-map
               ("C-," . nil)
@@ -159,23 +160,25 @@
 ;; rust
 (use-package rust-mode
   :ensure t
+  :requires (lsp-mode)
   :init
   (setq rust-format-on-save t)
   (setq indent-tabs-mode nil)
   :bind (:map rust-mode-map
-              ("C-c C-c" . rust-run))
-  :hook ((rust-mode . smartparens-mode)))
-
-(use-package lsp-rust
-  :ensure t
-  :after (rust-mode lsp-mode)
-  :bind
-  (("M-c" . lsp-extend-selection)
-   ("M-j" . lsp-rust-analyzer-join-lines)
-   ("C-." . lsp-goto-type-definition))
+              ("C-c C-c" . rust-run)
+              ("M-c" . lsp-extend-selection)
+              ("M-j" . lsp-rust-analyzer-join-lines)
+              ("C-." . lsp-goto-type-definition)
+              )
+  :hook ((rust-mode . smartparens-mode)
+         (rust-mode . lsp-mode))
   :config
-  (lsp-rust-server (if (executable-find "rust-analyzer") 'rust-analyzer 'rls))
-  (lsp-rust-analyzer-server-display-inlay-hints nil))
+  (setq lsp-rust-analyzer-server-display-inlay-hints nil)
+  (setq lsp-rust-analyzer-proc-macro-enable t)
+  (setq lsp-rust-analyzer-cargo-load-out-dirs-from-check t)
+  (setq lsp-rust-analyzer-inlay-hints-mode t)
+  (setq lsp-rust-analyzer-display-chaining-hints t)
+  (setq lsp-rust-analyzer-display-parameter-hints t))
 
 (use-package flycheck-rust
   :ensure t
