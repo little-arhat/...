@@ -134,7 +134,7 @@
   :ensure t
   :hook ((go-mode . lsp-deferred)
          (python-mode . lsp-deffered)
-         (rust-mode . lsp-deffered)
+         (rust-mode . lsp)
          (java-mode . lsp-deffered)
          ;; (clojure-mode . lsp)
          )
