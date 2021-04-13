@@ -1,4 +1,4 @@
-;;
+
 ;; org mode
 (use-package org
   :bind (:map org-mode-map
@@ -26,17 +26,7 @@
             (lambda ()
               (set (make-local-variable 'whitespace-style)
                    '(face trailing lines-tail))
-              (whitespace-mode -1)
-              (whitespace-mode 1)))
-  :custom
-  (godoc-at-point-function #'godoc-gogetdoc))
-
-(defvar python-mode-map)
-(add-hook 'python-mode-hook
-          (lambda ()
-            (setq imenu-create-index-function 'python-imenu-create-index)
-            (define-key python-mode-map (kbd "RET") 'newline-maybe-indent)))
-
+              (whitespace-mode 1))))
 
 (use-package flycheck
   :ensure t
@@ -49,58 +39,24 @@
 
 (use-package flycheck-pyflakes
   :ensure t
-  :init
-  (add-hook 'python-mode-hook (lambda () (require 'flycheck-pyflakes))))
-
-(use-package flycheck-joker
-  :ensure t)
-
-;; Ruby
-(defvar ruby-mode-map)
-(with-eval-after-load 'ruby-mode
-  (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent))
+  :hook (python-mode . flycheck-pyflakes))
 
 ;; highlight parentheses
 (use-package highlight-parentheses
   :ensure t
-  :init
-  (dolist (hook '(python-mode-hook
-                  emacs-lisp-mode-hook
-                  rust-mode-hook
-                  clojure-mode-hook))
-    (add-hook hook 'highlight-parentheses-mode)))
-
-;; whole-line-or-region
-(use-package whole-line-or-region
-  :ensure t
-  :commands
-  whole-line-or-region-global-mode
-  whole-line-or-region-call-with-region
-  :init
-  (defun whole-line-kill-region-or-word-backward (prefix)
-    "Kill (cut) region or just a single word backward"
-    (interactive "*p")
-    (if (not (and mark-active (/= (point) (mark))))
-        (subword-backward-kill prefix)
-      (whole-line-or-region-call-with-region 'kill-region prefix t)))
-  (setq whole-line-or-region-extensions-alist
-        '((copy-region-as-kill whole-line-or-region-copy-region-as-kill nil)
-          (kill-region whole-line-kill-region-or-word-backward nil)
-          (kill-ring-save whole-line-or-region-kill-ring-save nil)
-          (yank whole-line-or-region-yank nil)))
-  (whole-line-or-region-global-mode))
-
-;; (use-package lsp-clojure
-;;   :after (lsp-mode))
-
-;; (use-package lsp-treemacs
-;;   :after (lsp-mode))
+  :hook ((python-mode
+          emacs-lisp-mode
+          rust-mode
+          clojure-mode
+          text-mode) . highlight-parentheses-mode))
 
 (use-package clojure-mode
   :ensure t
   :commands put-clojure-indent
-  :mode ("\\.boot\\'" . clojure-mode)
-        ("\\.edn\\'" . clojure-mode)
+  :mode (("\\.boot\\'" . clojure-mode)
+         ("\\.edn\\'" . clojure-mode)
+         ("\\.clj\\'" . clojure-mode)
+         ("deps.edn" . clojure-mode))
   :init
   (setq clojure-indent-style :always-indent)
   (setq clojure-thread-all-but-last t)
@@ -117,26 +73,32 @@
   :bind (:map cider-repl-mode-map
               ("C-c M-r" . cider-repl-previous-matching-input)
               ("C-c M-s" . cider-repl-next-matching-input))
-  :init
-  (add-hook 'clojure-mode-hook 'cider-mode)
-  (add-hook 'cider-repl-mode-hook 'smartparens-mode)
+  :hook
+  ((clojure-mode . cider-mode)
+   (cider-repl-mode . smartparens-mode))
   :config
   (setq
    cider-show-error-buffer nil
    cider-repl-history-file "~/.emacs.d/cider-history"
    cider-repl-display-help-banner nil))
 
+(use-package clj-refactor
+  :ensure t
+  :hook ((clojure-mode . clj-refactor-mode))
+  :init
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
+
 (use-package smartparens
   :ensure t
-  :no-require t
   :commands smartparens-global-mode
-  :init
+  :hook
+  ((lisp-mode . smartparens-strict-mode)
+   (emacs-lisp-mode . smartparens-strict-mode)
+   (clojure-mode . smartparens-strict-mode))
+  :config
   (require 'smartparens-config)
   (show-smartparens-global-mode t)
   (show-paren-mode nil)
-  (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
   :bind (:map smartparens-mode-map
               ("C-M-f" . sp-forward-sexp)
               ("C-M-b" . sp-backward-sexp)
@@ -164,11 +126,9 @@
 (use-package sql-indent
   :ensure t
   :commands sqlind-minor-mode
-  :init
-  (add-hook 'sql-mode-hook 'sqlind-minor-mode))
+  :hook ((sql-mode . sqlind-minor-mode)))
 
 ;; lsp
-
 (use-package lsp-mode
   :ensure t
   :hook ((go-mode . lsp-deferred)
@@ -190,6 +150,12 @@
    lsp-auto-execute-action nil
    lsp-signature-auto-activate nil))
 
+(use-package lsp-clojure
+  :after (lsp-mode clojure-mode))
+
+(use-package lsp-treemacs
+  :after (lsp-mode))
+
 ;; rust
 (use-package rust-mode
   :ensure t
@@ -198,28 +164,25 @@
   (setq indent-tabs-mode nil)
   :bind (:map rust-mode-map
               ("C-c C-c" . rust-run))
-  :config
-  (add-hook 'rust-mode-hook 'smartparens-mode)
-  (use-package lsp-rust
-             :ensure lsp-mode
-             :bind
-             (("M-c" . lsp-extend-selection)
-              ("M-j" . lsp-rust-analyzer-join-lines)
-              ("C-." . lsp-goto-type-definition))
-             :custom
-             (lsp-rust-server (if (executable-find "rust-analyzer") 'rust-analyzer 'rls))
-             (lsp-rust-analyzer-server-display-inlay-hints nil)))
+  :hook ((rust-mode . smartparens-mode)))
 
-(use-package cargo  :ensure t)
+(use-package lsp-rust
+  :ensure t
+  :after (rust-mode lsp-mode)
+  :bind
+  (("M-c" . lsp-extend-selection)
+   ("M-j" . lsp-rust-analyzer-join-lines)
+   ("C-." . lsp-goto-type-definition))
+  :config
+  (lsp-rust-server (if (executable-find "rust-analyzer") 'rust-analyzer 'rls))
+  (lsp-rust-analyzer-server-display-inlay-hints nil))
 
 (use-package flycheck-rust
   :ensure t
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-  (add-hook 'rust-mode-hook #'flycheck-mode))
+  :hook ((flycheck-mode . flycheck-rust-setup)
+         (rust-mode . flycheck-mode)))
 
 ;; ocaml
-
 (use-package tuareg
   :mode (("\\.ml[ily]?$" . tuareg-mode)
          ("\\.topml$" . tuareg-mode))
@@ -240,29 +203,28 @@
     (if (executable-find "opam")
         (setq utop-command "opam config exec -- utop -emacs")
       ))
-  (define-key utop-mode-map (kbd "C-j") 'utop-history-goto-next)
-  (define-key utop-mode-map (kbd "C-k") 'utop-history-goto-prev))
+  :bind (
+         ("C-j" . utop-history-goto-next)
+         ("C-k" . utop-history-goto-prev)))
 
 (use-package merlin
   :ensure t
+  :hook ((tuareg-mode . merlin-mode))
   :init
-  (progn
-    (add-hook 'tuareg-mode-hook 'merlin-mode)
-    (setq merlin-completion-with-doc t)))
+  (setq merlin-completion-with-doc t))
 
 ;; Various
 (use-package projectile
   :ensure t
   :commands projectile-mode
+  :diminish projectile-mode
+  :config (projectile-mode)
   :init
   (setq projectile-enable-caching t)
   (setq projectile-completion-system 'default)
-  (projectile-mode 1)
+  :bind-keymap ("C-c p" . projectile-command-map)
   :bind (("C-x b" . projectile-switch-to-buffer)
-         ("C-c i" . projectile-find-other-file)
-         :map projectile-mode-map
-              ("s-p" . projectile-command-map)
-              ("C-c p" . projectile-command-map)))
+         ("C-c i" . projectile-find-other-file)))
 
 (use-package ctrlf
   :ensure t
@@ -313,19 +275,15 @@
   :ensure t
   :no-require t
   :commands dockerfile-mode
-  :init (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
-
-(use-package hcl-mode
-  :ensure t)
-
-(use-package terraform-mode
-  :ensure t)
+  :mode (("Dockerfile" . dockerfile-mode)))
 
 (use-package lua-mode
-  :ensure t)
+  :ensure t
+  :mode (("\\.lua\\'" . lua-mode)))
 
 (use-package q-mode
-  :ensure t)
+  :ensure t
+  :mode (("\\.q\\'" . q-mode)))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -368,6 +326,7 @@
 
 (use-package telega
   :ensure t
+  :defer t
   :bind-keymap ("C-c t" . telega-prefix-map)
   :commands (telega)
   :config

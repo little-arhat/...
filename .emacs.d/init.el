@@ -8,7 +8,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-; (setq package-enable-at-startup nil)
+                                        ; (setq package-enable-at-startup nil)
+
+(setq gc-cons-threshold 64000000)
+(add-hook 'after-init-hook #'(lambda ()
+                               ;; restore after startup
+                               (setq gc-cons-threshold 800000)))
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 ;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
