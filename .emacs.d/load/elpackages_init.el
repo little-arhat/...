@@ -38,9 +38,6 @@
   :init
   (add-hook 'after-init-hook 'global-flycheck-mode))
 
-(use-package flycheck-pyflakes
-  :ensure t
-  :hook (python-mode . flycheck-pyflakes))
 
 ;; highlight parentheses
 (use-package highlight-parentheses
@@ -133,7 +130,7 @@
 (use-package lsp-mode
   :ensure t
   :hook ((go-mode . lsp-deferred)
-         (python-mode . lsp-deffered)
+         (python-mode . lsp)
          (rust-mode . lsp)
          (java-mode . lsp-deffered)
          ;; (clojure-mode . lsp)

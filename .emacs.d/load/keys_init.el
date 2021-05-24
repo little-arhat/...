@@ -4,7 +4,8 @@
 (global-set-key (kbd "C-x C-b") 'bs-show)
 (global-set-key (kbd "C-,") 'bs-show)
 
-(global-set-key (kbd "C-x C-z") 'undo)
+(global-set-key (kbd "C-_") 'undo)
+(global-set-key (kbd "C-.") 'undo-redo)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "M-?") 'help-command)
 (global-set-key (kbd "C-x C-r") 'query-replace-regexp)
