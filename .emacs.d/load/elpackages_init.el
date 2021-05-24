@@ -202,10 +202,7 @@
   (progn
     (if (executable-find "opam")
         (setq utop-command "opam config exec -- utop -emacs")
-      ))
-  :bind (
-         ("C-j" . utop-history-goto-next)
-         ("C-k" . utop-history-goto-prev)))
+      )))
 
 (use-package merlin
   :ensure t
