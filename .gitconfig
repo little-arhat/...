@@ -14,8 +14,8 @@
     myput = push little-arhat HEAD
     df = diff --color=always
     wdf = diff --word-diff --color=always
-    flog = log --author="teamcity" --invert-grep
-    lg = log -p --color --author="teamcity" --invert-grep
+    flog = log
+    lg = log -p --color
     ulg = log -p --color
     latest = log -n5 -r
     glog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --author=teamcity_svc --invert-grep
@@ -35,3 +35,5 @@
     myshort = shortlog --author='Roma Sokolov'
 [diff]
 	algorithm = histogram
+[init]
+	defaultBranch = master

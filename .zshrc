@@ -331,6 +331,7 @@ alias sd="screen -D -r"
 alias l=$PAGER
 alias g="egrep -i --color -n"
 alias ag="rg -i"
+alias agg="rg -i --no-ignore --ignore-vcs"
 alias f="fd -H --no-ignore"
 function gr() { egrep -i --color -r $1 . }
 alias h="head"
@@ -384,6 +385,7 @@ function git-touche() {
 }
 
 alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias c++='clang++ -std=c++2a'
 
 # local specific aliases and settings
 # local settings can override some settings

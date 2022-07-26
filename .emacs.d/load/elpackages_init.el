@@ -35,8 +35,11 @@
          ("C-c C-x" . flycheck-next-error)
          ("C-c C-n" . flycheck-next-error) ; backup for cider
          )
-  :init
-  (add-hook 'after-init-hook 'global-flycheck-mode))
+  :config
+  (setq flycheck-gcc-language-standard "c++2a")
+  (setq flycheck-clang-language-standard "c++2a")
+  :hook
+  (after-init . global-flycheck-mode))
 
 
 ;; highlight parentheses
@@ -47,6 +50,19 @@
           rust-mode
           clojure-mode
           text-mode) . highlight-parentheses-mode))
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode t)
+
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter "python3")))))
 
 (use-package clojure-mode
   :ensure t
