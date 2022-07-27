@@ -8,7 +8,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-                                        ; (setq package-enable-at-startup nil)
+(setq package-enable-at-startup nil)
 
 (setq gc-cons-threshold 64000000)
 (add-hook 'after-init-hook #'(lambda ()
@@ -21,6 +21,9 @@
 
 (eval-when-compile
   (require 'use-package))
+
+;; (debug-on-entry 'package-refresh-contents)
+(setq use-package-verbose t)
 
 (use-package bind-key
   :ensure t)

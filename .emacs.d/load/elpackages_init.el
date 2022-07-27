@@ -303,7 +303,7 @@
   :commands rainbow-delimiters-mode-enable)
 
 (use-package flyspell
-  :ensure t
+  :ensure nil ;; otherwise checks every time?
   :custom
   (ispell-program-name "aspell")
   (ispell-dictionary "en_GB")
