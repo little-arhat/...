@@ -7,7 +7,7 @@
  '(flycheck-gcc-language-standard "c++2a")
  '(highlight-parentheses-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
  '(package-selected-packages
-   '(4clojure @ telega 0x0 0blayout 0xc rustic julia-repl julia-mode pyvenv rust-mode flyspell lsp-treemacs borg lsp-rust whole-line-or-region utop use-package tuareg terraform-mode string-inflection sql-indent solarized-theme smartparens selectrum-prescient rainbow-delimiters q-mode projectile merlin magit lua-mode lsp-mode kill-ring-search imenu-anywhere highlight-parentheses go-mode flycheck-rust flycheck-pyflakes flycheck-joker flimenu dockerfile-mode deadgrep dash-functional ctrlf company clj-refactor cargo))
+   '(yaml-mode poetry 2bit calc-prog-utils 2048-game 4clojure @ telega 0x0 0blayout 0xc rustic julia-repl julia-mode pyvenv rust-mode flyspell lsp-treemacs borg lsp-rust whole-line-or-region utop use-package tuareg terraform-mode string-inflection sql-indent solarized-theme smartparens selectrum-prescient rainbow-delimiters q-mode projectile merlin magit lua-mode lsp-mode kill-ring-search imenu-anywhere highlight-parentheses go-mode flycheck-rust flycheck-pyflakes flycheck-joker flimenu dockerfile-mode deadgrep dash-functional ctrlf company clj-refactor cargo))
  '(safe-local-variable-values
    '((cider-ns-refresh-after-fn . "integrant.repl/resume")
      (cider-ns-refresh-before-fn . "integrant.repl/suspend")
@@ -27,6 +27,7 @@
      (cider-repl-display-help-banner)
      (encoding . utf-8)
      (prompt-to-byte-compile)))
+ '(telega-chat-folder-format "%I")
  '(warning-suppress-types '((telega))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

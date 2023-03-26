@@ -64,6 +64,10 @@
         (list (lambda ()
                 (setq python-shell-interpreter "python3")))))
 
+(use-package poetry
+  :ensure t
+  :hook (after-init . poetry-tracking-mode))
+
 (use-package clojure-mode
   :ensure t
   :commands put-clojure-indent
@@ -96,11 +100,11 @@
    cider-repl-history-file "~/.emacs.d/cider-history"
    cider-repl-display-help-banner nil))
 
-(use-package clj-refactor
-  :ensure t
-  :hook ((clojure-mode . clj-refactor-mode))
-  :init
-  (cljr-add-keybindings-with-prefix "C-c C-m"))
+;; (use-package clj-refactor
+;;   :ensure t
+;;   :hook ((clojure-mode . clj-refactor-mode))
+;;   :init
+;;   (cljr-add-keybindings-with-prefix "C-c C-m"))
 
 (use-package smartparens
   :ensure t
@@ -364,6 +368,7 @@
   (setq telega-open-message-as-file '(video audio video-note voice-note))
   (setq telega-chat-send-disable-webpage-preview t)
   (setq telega-chat-fill-column 90)
+  (setq telega-chat-folder-format "%I")
   (setq scroll-margin 3)
   (setq telega-root-default-view-function 'telega-view-two-lines)
   (setq telega-vvnote-video-cmd
