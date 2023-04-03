@@ -35,5 +35,9 @@
     myshort = shortlog --author='Roma Sokolov'
 [diff]
 	algorithm = histogram
+[merge]
+        conflictstyle = diff3
 [init]
 	defaultBranch = master
+[hub]
+	protocol = https
