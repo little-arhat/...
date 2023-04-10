@@ -376,6 +376,8 @@
   (add-hook 'telega-load-hook 'global-telega-squash-message-mode)
   (add-hook 'telega-load-hook 'global-telega-mnz-mode)
 
+  (add-to-list 'telega-browse-url-alist '(".*" . browse-url-default-macosx-browser))
+
   (setq telega-emoji-use-images nil)
 
   (setq telega-webpage-preview-size-limits nil)
