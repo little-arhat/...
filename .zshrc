@@ -47,9 +47,11 @@ typeset -U path cdpath fpath manpath
 
 # History
 HISTFILE=~/.zhistory
-HISTSIZE=50000
-SAVEHIST=100000
-setopt append_history
+HISTSIZE=500000
+SAVEHIST=1000000
+# setopt append_history
+setopt inc_append_history
+# setopt share_history
 setopt extended_history
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
@@ -382,6 +384,11 @@ function wman() {
 
 function git-touche() {
     git log --name-only --pretty=format:%n --grep="$1" | sort -u
+}
+
+function day() {
+    declare -i i=${1:-$(</dev/stdin)};
+    date -r $(($i / 1000))
 }
 
 alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
