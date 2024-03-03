@@ -85,7 +85,7 @@
   (setq tab-always-indent 'complete)
   :bind
   ((:map company-mode-map
-         ("TAB" . 'company-complete))
+         ("M-'" . 'company-complete))
    (:map company-active-map
          ("C-n" . 'company-select-next)
          ("C-p" . 'company-select-previous))))
