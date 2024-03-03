@@ -49,6 +49,9 @@
             java-mode scala-mode rust-mode rust-ts-mode python-mode)
           . eglot-ensure)
          ((cider-mode eglot-managed-mode) . eglot-disable-in-cider))
+  :bind (:map eglot-mode-map
+              ("C-c C-f" . eglot-format-buffer)
+              ("C-c a" . eglot-code-actions))
   :preface
   (defun eglot-disable-in-cider ()
     (when (eglot-managed-p)
@@ -63,14 +66,29 @@
   (eglot-events-buffer-size 0)
   (eglot-extend-to-xref nil)
   (eglot-ignored-server-capabilities
-   '(:hoverProvider
-     :documentHighlightProvider
-     :documentFormattingProvider
-     :documentRangeFormattingProvider
-     :documentOnTypeFormattingProvider
+   '(:documentHighlightProvider
      :colorProvider
      :foldingRangeProvider))
   (eglot-stay-out-of '(yasnippet)))
+
+
+
+(use-package company
+  :ensure t
+  :hook (after-init . global-company-mode)
+  :init
+  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0)
+  (setq company-require-match 'never)
+  (setq-default company-dabbrev-other-buffers 'all
+                company-tooltip-align-annotations t)
+  (setq tab-always-indent 'complete)
+  :bind
+  ((:map company-mode-map
+         ("TAB" . 'company-complete))
+   (:map company-active-map
+         ("C-n" . 'company-select-next)
+         ("C-p" . 'company-select-previous))))
 
 ;; highlight parentheses
 (use-package highlight-parentheses
