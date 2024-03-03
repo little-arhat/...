@@ -46,7 +46,7 @@
 (use-package eglot
   :ensure t
   :hook ((( clojure-mode clojurec-mode clojurescript-mode
-            java-mode scala-mode rust-mode rust-ts-mode python-mode)
+            java-mode scala-mode rust-mode rust-ts-mode python-mode python-ts-mode)
           . eglot-ensure)
          ((cider-mode eglot-managed-mode) . eglot-disable-in-cider))
   :bind (:map eglot-mode-map
@@ -93,24 +93,12 @@
 ;; highlight parentheses
 (use-package highlight-parentheses
   :ensure t
-  :hook ((python-mode
+  :hook ((python-ts-mode
           emacs-lisp-mode
           rust-ts-mode
           clojure-mode
           text-mode) . highlight-parentheses-mode))
 
-(use-package pyvenv
-  :defer t
-  :config
-  (pyvenv-mode t)
-
-  ;; Set correct Python interpreter
-  (setq pyvenv-post-activate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
-  (setq pyvenv-post-deactivate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter "python3")))))
 
 (use-package clojure-mode
   :defer t
@@ -189,6 +177,27 @@
   :defer t
   :commands sqlind-minor-mode
   :hook ((sql-mode . sqlind-minor-mode)))
+
+
+(use-package pyvenv-auto
+  :defer t
+  :hook (python-ts-mode . pyvenv-auto-run))
+
+(use-package pyvenv
+  :defer t
+  :config
+  (pyvenv-mode t))
+
+
+(use-package python-ts-mode
+  :mode "\\.py\\'"
+  :defer t
+  :hook ((python-ts-mode . smartparens-mode))
+  :config
+  (setq indent-tabs-mode nil)
+  :init
+  (setopt python-shell-completion-native-enable nil))
+
 
 ;; rust
 (use-package rust-ts-mode
