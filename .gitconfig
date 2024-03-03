@@ -35,6 +35,9 @@
     myshort = shortlog --author='Roma Sokolov'
 [diff]
 	algorithm = histogram
+        ignoreSubmodules = dirty
+        colorMoved = default
+        wordRegex = [_[:alnum:]]+
 [merge]
         conflictstyle = diff3
 [init]

@@ -384,6 +384,10 @@ function git-touche() {
     git log --name-only --pretty=format:%n --grep="$1" | sort -u
 }
 
+function opa() {
+    eval $(opam env)
+}
+
 alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias c++='clang++ -std=c++2a'
 
