@@ -2,7 +2,7 @@
     name = Roma Sokolov
     email = sokolov.r.v@gmail.com
 [includeIf "gitdir:~/prj/w/"]
-  path = .gitconfig-work
+    path = .gitconfig-work
 [alias]
     ci = commit
     st = status -s
@@ -34,11 +34,20 @@
     mylog = log --author='Roma Sokolov'
     myshort = shortlog --author='Roma Sokolov'
 [diff]
-	algorithm = histogram
+    algorithm = histogram
+    ignoreSubmodules = dirty
+    colorMoved = default
+    wordRegex = [_[:alnum:]]+
+[merge]
+    conflictstyle = diff3
 [init]
-	defaultBranch = master
+    defaultBranch = master
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+[hub]
+    protocol = https
+[http]
+    sslverify = false

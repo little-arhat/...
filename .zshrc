@@ -386,6 +386,10 @@ function git-touche() {
     git log --name-only --pretty=format:%n --grep="$1" | sort -u
 }
 
+function opa() {
+    eval $(opam env)
+}
+
 function day() {
     declare -i i=${1:-$(</dev/stdin)};
     date -r $(($i / 1000))

@@ -45,6 +45,7 @@
 (global-set-key (kbd "<right>")  'windmove-right)
 
 (global-set-key (kbd "C-q C-q") 'rotate-windows)
+(global-set-key (kbd "C-q C-r") 'quoted-insert)
 (global-set-key (kbd "C-q C-f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "H-f") 'toggle-frame-fullscreen)
 (global-set-key (kbd "C-q C-t") 'toggle-frame-maximized)

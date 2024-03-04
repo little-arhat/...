@@ -85,9 +85,9 @@
         haskell-mode-hook
         tuareg-mode-hook
         ruby-mode-hook
-        python-mode-hook
+        python-ts-mode-hook
         clojure-mode-hook
-        rust-mode-hook
+        rust-ts-mode-hook
         js-mode-hook))
 (dolist (hook hooks-with-whitespaces) (add-hook hook 'whitespace-mode))
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)

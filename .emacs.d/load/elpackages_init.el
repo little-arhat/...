@@ -2,6 +2,7 @@
 
 ;; org mode.
 (use-package org
+  :defer t
   :bind (:map org-mode-map
               ("C-," . nil)
               ("C-S-<up>" . org-timestamp-up)
@@ -11,7 +12,7 @@
 
 ;; major modes
 (use-package markdown-mode
-  :ensure t
+  :defer t
   :mode ("\\.markdown\\'" . markdown-mode)
         ("\\.md\\'" . markdown-mode)
   :bind (:map markdown-mode-map
@@ -19,7 +20,7 @@
          ("M-<left>" . nil)))
 
 (use-package go-mode
-  :ensure t
+  :defer t
   :mode ("\\.go\\'" . go-mode)
   :commands godoc-gogetdoc
   :config
@@ -41,31 +42,66 @@
   :hook
   (after-init . global-flycheck-mode))
 
+;;; lsp/eglot
+(use-package eglot
+  :ensure t
+  :hook ((( clojure-mode clojurec-mode clojurescript-mode
+            java-mode scala-mode rust-mode rust-ts-mode python-mode python-ts-mode)
+          . eglot-ensure)
+         ((cider-mode eglot-managed-mode) . eglot-disable-in-cider))
+  :bind (:map eglot-mode-map
+              ("C-c C-f" . eglot-format-buffer)
+              ("C-c a" . eglot-code-actions))
+  :preface
+  (defun eglot-disable-in-cider ()
+    (when (eglot-managed-p)
+      (if (bound-and-true-p cider-mode)
+          (progn
+            (remove-hook 'completion-at-point-functions 'eglot-completion-at-point t)
+            (remove-hook 'xref-backend-functions 'eglot-xref-backend t))
+        (add-hook 'completion-at-point-functions 'eglot-completion-at-point nil t)
+        (add-hook 'xref-backend-functions 'eglot-xref-backend nil t))))
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-events-buffer-size 0)
+  (eglot-extend-to-xref nil)
+  (eglot-ignored-server-capabilities
+   '(:documentHighlightProvider
+     :colorProvider
+     :foldingRangeProvider))
+  (eglot-stay-out-of '(yasnippet)))
+
+
+
+(use-package company
+  :ensure t
+  :hook (after-init . global-company-mode)
+  :init
+  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0)
+  (setq company-require-match 'never)
+  (setq-default company-dabbrev-other-buffers 'all
+                company-tooltip-align-annotations t)
+  (setq tab-always-indent 'complete)
+  :bind
+  ((:map company-mode-map
+         ("M-'" . 'company-complete))
+   (:map company-active-map
+         ("C-n" . 'company-select-next)
+         ("C-p" . 'company-select-previous))))
 
 ;; highlight parentheses
 (use-package highlight-parentheses
   :ensure t
-  :hook ((python-mode
+  :hook ((python-ts-mode
           emacs-lisp-mode
-          rust-mode
+          rust-ts-mode
           clojure-mode
           text-mode) . highlight-parentheses-mode))
 
-(use-package pyvenv
-  :ensure t
-  :config
-  (pyvenv-mode t)
-
-  ;; Set correct Python interpreter
-  (setq pyvenv-post-activate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
-  (setq pyvenv-post-deactivate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter "python3")))))
 
 (use-package clojure-mode
-  :ensure t
+  :defer t
   :commands put-clojure-indent
   :mode (("\\.boot\\'" . clojure-mode)
          ("\\.edn\\'" . clojure-mode)
@@ -81,7 +117,7 @@
   (setq clojure-toplevel-inside-comment-form t))
 
 (use-package cider
-  :ensure t
+  :defer t
   :no-require t
   :commands cider-mode
   :bind (:map cider-repl-mode-map
@@ -96,11 +132,11 @@
    cider-repl-history-file "~/.emacs.d/cider-history"
    cider-repl-display-help-banner nil))
 
-(use-package clj-refactor
-  :ensure t
-  :hook ((clojure-mode . clj-refactor-mode))
-  :init
-  (cljr-add-keybindings-with-prefix "C-c C-m"))
+;; (use-package clj-refactor
+;;   :ensure t
+;;   :hook ((clojure-mode . clj-refactor-mode))
+;;   :init
+;;   (cljr-add-keybindings-with-prefix "C-c C-m"))
 
 (use-package smartparens
   :ensure t
@@ -138,71 +174,56 @@
               ("C-c c" . sp-comment)))
 
 (use-package sql-indent
-  :ensure t
+  :defer t
   :commands sqlind-minor-mode
   :hook ((sql-mode . sqlind-minor-mode)))
 
-;; lsp
-(use-package lsp-mode
-  :ensure t
-  :hook ((go-mode . lsp-deferred)
-         (python-mode . lsp)
-         (rust-mode . lsp)
-         (java-mode . lsp-deffered)
-         ;; (clojure-mode . lsp)
-         )
-  :bind-keymap ("M-l" . lsp-command-map)
+
+(use-package pyvenv-auto
+  :defer t
+  :hook (python-ts-mode . pyvenv-auto-run))
+
+(use-package pyvenv
+  :defer t
+  :config
+  (pyvenv-mode t))
+
+
+(use-package python-ts-mode
+  :mode "\\.py\\'"
+  :defer t
+  :hook ((python-ts-mode . smartparens-mode))
+  :config
+  (setq indent-tabs-mode nil)
   :init
-   (setq
-   lsp-headerline-breadcrumb-enable nil
-   lsp-enable-file-watchers t
-   lsp-file-watch-threshold 10000
-   lsp-signature-render-documentation nil
-   lsp-semantic-tokens-enable nil
-   lsp-lens-enable nil
-   lsp-completion-use-last-result nil
-   lsp-auto-execute-action nil
-   lsp-signature-auto-activate nil))
+  (setopt python-shell-completion-native-enable nil))
 
-(use-package lsp-clojure
-  :after (lsp-mode clojure-mode))
-
-(use-package lsp-treemacs
-  :after (lsp-mode))
 
 ;; rust
-(use-package rust-mode
-  :ensure t
-  :requires (lsp-mode)
-  :init
-  (setq rust-format-on-save t)
-  (setq indent-tabs-mode nil)
-  :bind (:map rust-mode-map
+(use-package rust-ts-mode
+  :mode "\\.rs\\'"
+  :defer t
+  :bind (:map rust-ts-mode-map
+              ("C-c C-b" . recompile)
               ("C-c C-c" . rust-run)
-              ("M-c" . lsp-extend-selection)
-              ("M-j" . lsp-rust-analyzer-join-lines)
-              ("C-." . lsp-goto-type-definition)
               )
-  :hook ((rust-mode . smartparens-mode)
-         (rust-mode . lsp-mode))
+  :hook ((rust-ts-mode . smartparens-mode)
+         )
   :config
-  (setq lsp-rust-analyzer-server-display-inlay-hints nil)
-  (setq lsp-rust-analyzer-proc-macro-enable t)
-  (setq lsp-rust-analyzer-cargo-load-out-dirs-from-check t)
-  (setq lsp-rust-analyzer-inlay-hints-mode t)
-  (setq lsp-rust-analyzer-display-chaining-hints t)
-  (setq lsp-rust-analyzer-display-parameter-hints t))
+  (setq indent-tabs-mode nil)
+  )
 
-(use-package flycheck-rust
+(use-package flycheck-eglot
+  :after (eglot flycheck)
   :ensure t
-  :hook ((flycheck-mode . flycheck-rust-setup)
-         (rust-mode . flycheck-mode)))
+  :init
+  (global-flycheck-eglot-mode 1))
 
 ;; ocaml
 (use-package tuareg
   :mode (("\\.ml[ily]?$" . tuareg-mode)
          ("\\.topml$" . tuareg-mode))
-  :ensure t
+  :defer t
   :init
   (progn
     ;; Make OCaml-generated files invisible to filename completion
@@ -210,7 +231,7 @@
       (add-to-list 'completion-ignored-extensions ext))))
 
 (use-package utop
-  :ensure t
+  :defer t
   :init
   (progn
     (add-hook 'tuareg-mode-hook 'utop-minor-mode))
@@ -221,7 +242,7 @@
       )))
 
 (use-package merlin
-  :ensure t
+  :defer t
   :hook ((tuareg-mode . merlin-mode))
   :init
   (setq merlin-completion-with-doc t))
@@ -266,7 +287,7 @@
   :bind ("C-c M-A" . imenu-anywhere))
 
 (use-package magit
-  :ensure t
+  :defer t
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch))
   :config
@@ -285,17 +306,17 @@
   :bind (("C-x p" . piu)))
 
 (use-package dockerfile-mode
-  :ensure t
+  :defer t
   :no-require t
   :commands dockerfile-mode
   :mode (("Dockerfile" . dockerfile-mode)))
 
 (use-package lua-mode
-  :ensure t
+  :defer t
   :mode (("\\.lua\\'" . lua-mode)))
 
 (use-package q-mode
-  :ensure t
+  :defer t
   :mode (("\\.q\\'" . q-mode)))
 
 (use-package rainbow-delimiters
@@ -346,8 +367,7 @@
   (use-package telega-mnz)
   (defun my-telega-chat-mode ()
     (set (make-local-variable 'company-backends)
-         (append (list telega-emoji-company-backend
-                       'telega-company-username
+         (append (list 'telega-company-username
                        'telega-company-hashtag)
                  (when (telega-chat-bot-p telega-chatbuf--chat)
                    '(telega-company-botcmd))))
@@ -365,7 +385,8 @@
   (setq telega-open-file-function 'browse-url-default-macosx-browser)
   (setq telega-open-message-as-file '(video audio video-note voice-note))
   (setq telega-chat-send-disable-webpage-preview t)
-  (setq telega-chat-fill-column 90)
+  (setq telega-chat-fill-column 104)
+  (setq telega-chat-folder-format "%I")
   (setq scroll-margin 3)
   (setq telega-root-default-view-function 'telega-view-two-lines)
   (setq telega-vvnote-video-cmd
