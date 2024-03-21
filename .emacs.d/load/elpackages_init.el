@@ -51,7 +51,10 @@
          ((cider-mode eglot-managed-mode) . eglot-disable-in-cider))
   :bind (:map eglot-mode-map
               ("C-c C-f" . eglot-format-buffer)
-              ("C-c a" . eglot-code-actions))
+              ("C-c a" . eglot-code-actions)
+              ("C-x C-u" . xref-find-references)
+              ("C-x C-d" . xref-find-definitions)
+              )
   :preface
   (defun eglot-disable-in-cider ()
     (when (eglot-managed-p)
@@ -70,7 +73,6 @@
      :colorProvider
      :foldingRangeProvider))
   (eglot-stay-out-of '(yasnippet)))
-
 
 
 (use-package company
