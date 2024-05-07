@@ -58,8 +58,7 @@ suitable for binding to keys."
           (load (format "%s_init" name)))
         modules))
 (load-init
- '(apropos
-   general
+ '(general
    frame
    funs
    elpackages

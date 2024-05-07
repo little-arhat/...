@@ -274,10 +274,6 @@ This takes a numeric prefix argument; when not 1, it behaves exactly like
   (when (use-region-p)
     (buffer-substring-no-properties (region-beginning) (region-end))))
 
-(defun projectile-deadgrep (search-term)
-  (interactive (list (deadgrep--read-search-term)))
-  (let ((deadgrep-project-root-function #'projectile-project-root))
-    (deadgrep search-term)))
 
 ;;; (C) banister (John Mair)
 ;;; slightly patched by me ^_^

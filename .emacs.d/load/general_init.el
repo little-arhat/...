@@ -47,8 +47,6 @@
  auto-save-interval 512              ;; autosave every 512 keyboard inputs
  auto-save-list-file-prefix nil
  cursor-in-non-selected-windows nil
- dired-recursive-copies 'top
- dired-recursive-deletes 'top
  safe-local-variable-values '((encoding . utf-8) (prompt-to-byte-compile))
  dabbrev-case-fold-search nil        ;; Case is significant for dabbrev
  split-width-threshold 110
@@ -87,3 +85,5 @@ Also update the variables `exec-path' and `eshell-path-env'."
   (setq-default eshell-path-env value))
 (if (display-graphic-p)
     (exec-path-from-shell-setenv (shell-command-to-string "zsh -c 'echo $PATH'")))
+
+(setq read-extended-command-predicate #'command-completion-default-include-p)

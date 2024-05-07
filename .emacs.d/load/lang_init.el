@@ -1,9 +1,6 @@
-(setq default-input-method "russian-computer")
-
-(when nix
-  (set-selection-coding-system 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-keyboard-coding-system 'utf-8))
+(set-selection-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-keyboard-coding-system 'utf-8)
 
 ;; This works for copying, but not pasting for some reason
 (setq select-enable-clipboard t)
