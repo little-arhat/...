@@ -1,7 +1,5 @@
 ;; various small modes configuration
 
-(require 'warnings)
-
 (setq tags-file-name (expand-file-name "~/TAGS"))
 ;; dired
 (setq
@@ -25,38 +23,12 @@
 
 (which-function-mode)
 
-;; whitespaces
-(require 'whitespace)
-(setq whitespace-style '(face trailing tabs lines-tail))
-(setq whitespace-line-column 80)
-;; face for long lines' tails
-(set-face-attribute 'whitespace-line nil
-                    :background "red1"
-                    :foreground "yellow"
-                    :weight 'bold)
-;; face for Tabs
-(set-face-attribute 'whitespace-tab nil
-                    :background "red1"
-                    :foreground "yellow"
-                    :weight 'bold)
-
 ;; TODO: highilight TODO et al for al modes
 
 (require 'linum)
 (set-face-attribute 'linum nil
                     :background "gray"
                     :foreground "red")
-
-(defvar hooks-with-whitespaces
-      '(erlang-mode-hook
-        haskell-mode-hook
-        tuareg-mode-hook
-        ruby-mode-hook
-        python-ts-mode-hook
-        clojure-mode-hook
-        rust-ts-mode-hook
-        js-mode-hook))
-(dolist (hook hooks-with-whitespaces) (add-hook hook 'whitespace-mode))
 (add-hook 'write-file-functions 'delete-trailing-whitespace)
 
 ;; I hate blinking

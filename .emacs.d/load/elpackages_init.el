@@ -61,6 +61,31 @@
   (autoload 'projectile-project-root "projectile")
   (setq consult-project-function (lambda (_) (projectile-project-root))))
 
+
+;;;;; visual
+
+(use-package whitespace
+  :diminish global-whitespace-mode
+  :config
+  ;; face for long lines' tails
+  (set-face-attribute 'whitespace-line nil
+                    :background "red1"
+                    :foreground "yellow"
+                    :weight 'bold)
+  ;; face for Tabs
+  (set-face-attribute 'whitespace-tab nil
+                      :background "red1"
+                      :foreground "yellow"
+                      :weight 'bold)
+  ;; magit-mode.
+  (defun galactic-emacs-prevent-whitespace-mode-for-magit ()
+    (not (derived-mode-p 'magit-mode)))
+  (add-function :before-while whitespace-enable-predicate 'galactic-emacs-prevent-whitespace-mode-for-magit)
+  (setq whitespace-line-column 80) ;; limit line length
+  (setq whitespace-style '(face trailing tabs lines-tail))
+  (global-whitespace-mode t))
+
+
 ;;;;; flymake, spell, lsp, etc.
 (use-package eglot
   :ensure t
@@ -373,3 +398,10 @@
   (setq telega-root-default-view-function 'telega-view-two-lines)
   (setq telega-vvnote-video-cmd
         "ffmpeg -f avfoundation -s 640x480 -framerate 30 -i default -r 30 -f avfoundation -i :default -vf format=yuv420p,crop=240:240:240:40 -vcodec hevc -vb 300k -strict -2 -acodec opus -ac 1 -ab 32k"))
+
+;;;;
+(use-package benchmark-init
+  :ensure t
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
