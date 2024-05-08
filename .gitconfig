@@ -33,6 +33,8 @@
     change-commits = "!f() { VAR=$1; OLD=$2; NEW=$3; shift 3; git filter-branch --env-filter \"if [[ \\\"$`echo $VAR`\\\" = '$OLD' ]]; then export $VAR='$NEW'; fi\" $@; }; f "
     mylog = log --author='Roma Sokolov'
     myshort = shortlog --author='Roma Sokolov'
+    dft = !GIT_EXTERNAL_DIFF=difft git diff
+    lgt = !GIT_EXTERNAL_DIFF=difft git log -p --ext-diff
 [diff]
     algorithm = histogram
     ignoreSubmodules = dirty
