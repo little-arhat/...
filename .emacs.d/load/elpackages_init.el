@@ -36,9 +36,9 @@
   ("C-x b" . consult-project-buffer)
   ("C-x c p" . consult-ripgrep)
   ("C-x c r" . consult-register)
-  ("C-x c l" . consult-register-load)
+  ("C-x c d" . consult-register-load)
   ("C-x c y" . consult-yank-from-kill-ring)
-  ("C-x c p" . consult-line)
+  ("C-x c l" . consult-line)
   ("C-x c m" . consult-flymake) ;; overwrite mail
   ("C-x c f" . consult-fd) ;; overwrite set-fill-column
   ;; Enable automatic preview at point in the *Completions* buffer. This is
