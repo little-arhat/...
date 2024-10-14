@@ -91,7 +91,7 @@
  '(flycheck-gcc-language-standard "c++2a")
  '(highlight-parentheses-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
  '(package-selected-packages
-   '(copilot-chat org-inline-pdfcomment sml-ts-mode uniline wollok-mode flycheck-clang-tidy clang-format jq-ts-mode cmake-ide telega consult-company company 750words benchmark-init flymake-aspell consult orderless vertico pyvenv-auto age yaml-mode 2bit calc-prog-utils 2048-game 4clojure @ 0x0 0blayout 0xc julia-repl julia-mode pyvenv rust-mode flyspell borg whole-line-or-region utop use-package tuareg terraform-mode string-inflection sql-indent solarized-theme smartparens rainbow-delimiters q-mode merlin lua-mode kill-ring-search highlight-parentheses go-mode flimenu dockerfile-mode dash-functional clj-refactor cargo))
+   '(magit diminish copilot-chat org-inline-pdfcomment sml-ts-mode uniline wollok-mode flycheck-clang-tidy clang-format jq-ts-mode cmake-ide telega consult-company company 750words benchmark-init flymake-aspell consult orderless vertico pyvenv-auto age yaml-mode 2bit calc-prog-utils 2048-game 4clojure @ 0x0 0blayout 0xc julia-repl julia-mode pyvenv rust-mode flyspell borg whole-line-or-region utop use-package tuareg terraform-mode string-inflection sql-indent solarized-theme smartparens rainbow-delimiters q-mode merlin lua-mode kill-ring-search highlight-parentheses go-mode flimenu dockerfile-mode dash-functional clj-refactor cargo))
  '(safe-local-variable-values
    '((cmake-ide-project-dir . "/path/to/project/dir")
      (cmake-ide-build-dir . "/path/to/build/dir")

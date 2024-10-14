@@ -65,6 +65,7 @@
 
 
 ;;;;; visual
+(use-package diminish :ensure t)
 
 (use-package whitespace
   :diminish global-whitespace-mode
@@ -100,16 +101,20 @@
             python-ts-mode
             c-mode
             c-ts-mode
-            cpp-mode
-            cpp-ts-mode)
+            c++-ts-mode)
           . eglot-ensure)
-         ((cider-mode eglot-managed-mode) . eglot-disable-in-cider))
+         ((cider-mode eglot-managed-mode) . eglot-disable-in-cider)
+         (eglot-managed-mode . (lambda () (eglot-inlay-hints-mode -1)))
+         )
   :bind (:map eglot-mode-map
               ("C-c C-f" . eglot-format-buffer)
               ("C-c a" . eglot-code-actions)
               ("C-x C-u" . xref-find-references)
               ("C-x C-d" . xref-find-definitions)
               )
+  :config
+  (add-to-list 'eglot-server-programs '((c++-ts-mode c-ts-mode) "clangd"))
+  (setq eglot-inlay-hints-mode nil)
   :preface
   (defun eglot-disable-in-cider ()
     (when (eglot-managed-p)
@@ -120,6 +125,7 @@
         (add-hook 'completion-at-point-functions 'eglot-completion-at-point nil t)
         (add-hook 'xref-backend-functions 'eglot-xref-backend nil t))))
   :custom
+  (eldoc-echo-area-use-multiline-p nil)
   (eglot-autoshutdown t)
   (eglot-events-buffer-size 0)
   (eglot-extend-to-xref nil)
@@ -432,6 +438,7 @@
   (add-hook 'telega-chat-mode-hook 'my-telega-chat-mode)
   (add-hook 'telega-load-hook 'global-telega-squash-message-mode)
   (add-hook 'telega-load-hook 'global-telega-mnz-mode)
+  (add-hook 'telega-chat-mode-hook (lambda () (global-whitespace-mode -1)))
 
   (add-to-list 'telega-browse-url-alist '(".*" . browse-url-default-macosx-browser))
 
