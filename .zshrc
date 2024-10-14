@@ -396,8 +396,7 @@ function day() {
 }
 
 alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias c++='clang++ -std=c++2a'
-
+alias c++='clang++ -std=c++23'
 # local specific aliases and settings
 # local settings can override some settings
 if [ -f ~/.zshenv ]; then

@@ -91,8 +91,17 @@
 ;;;;; flymake, spell, lsp, etc.
 (use-package eglot
   :ensure t
-  :hook ((( clojure-mode clojurec-mode clojurescript-mode
-            java-mode scala-mode rust-mode rust-ts-mode python-mode python-ts-mode)
+  :hook ((( clojure-mode
+            clojurec-mode
+            clojurescript-mode
+            java-mode scala-mode rust-mode
+            rust-ts-mode
+            python-mode
+            python-ts-mode
+            c-mode
+            c-ts-mode
+            cpp-mode
+            cpp-ts-mode)
           . eglot-ensure)
          ((cider-mode eglot-managed-mode) . eglot-disable-in-cider))
   :bind (:map eglot-mode-map
@@ -256,8 +265,7 @@
               ("C-c C-b" . recompile)
               ("C-c C-c" . rust-run)
               )
-  :hook ((rust-ts-mode . smartparens-mode)
-         )
+  :hook ((rust-ts-mode . smartparens-mode))
   :config
   (setq indent-tabs-mode nil))
 
@@ -306,6 +314,46 @@
   :hook ((tuareg-mode . merlin-mode))
   :init
   (setq merlin-completion-with-doc t))
+
+;; cpp
+(use-package c-ts-mode
+  :ensure nil
+  :config
+  (setq c-ts-mode-indent-offset tab-width)
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist
+               '(c-or-c++-mode . c-or-c++-ts-mode)))
+
+;; https://github.com/uyha/tree-sitter-cmake
+(use-package cmake-ts-mode
+  :ensure nil)
+
+(use-package cmake-ide
+  :defer t
+  :bind (("C-c C-b" . cmake-ide-compile)
+         ("C-c C-r" . cmake-ide-run-cmake))
+  :init
+  (use-package projectile :ensure t)
+  (defun my-cmake-ide-setup ()
+    (when (projectile-project-p)
+      (put 'cmake-ide-project-dir 'safe-local-variable 'stringp)
+      (put 'cmake-ide-build-dir 'safe-local-variable 'stringp)
+      (setq cmake-ide-project-dir (projectile-project-root))
+      (setq cmake-ide-build-dir (concat cmake-ide-project-dir "build")))
+    (setq cmake-ide-cmake-args '("-G" "Ninja"  "-DCMAKE_BUILD_TYPE=Release"))
+    (cmake-ide-setup))
+  (add-hook 'cmake-ts-mode-hook 'my-cmake-ide-setup)
+  (add-hook 'c-ts-mode-hook 'my-cmake-ide-setup)
+  (add-hook 'c++-ts-mode-hook 'my-cmake-ide-setup))
+
+(use-package clang-format
+    :config
+    (defun my-c-cpp-mode-clang-format-on-save ()
+      (add-hook 'before-save-hook 'clang-format-buffer nil t))
+    (add-hook 'c-ts-mode-hook 'my-c-cpp-mode-clang-format-on-save)
+    (add-hook 'c++-ts-mode-hook 'my-c-cpp-mode-clang-format-on-save)
+  :ensure t)
 
 ;; other
 

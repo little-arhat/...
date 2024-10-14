@@ -22,6 +22,7 @@
 (setq
  inhibit-startup-message t           ;; don't show annoing startup msg
  native-comp-async-report-warnings-errors nil
+ warning-minimum-level :error
  make-backup-files nil               ;; NO annoing backups
  vc-follow-symlinks t                ;; follow symlinks and don't ask
  echo-keystrokes 0.01                ;; see what you type

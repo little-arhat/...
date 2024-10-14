@@ -91,9 +91,11 @@
  '(flycheck-gcc-language-standard "c++2a")
  '(highlight-parentheses-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
  '(package-selected-packages
-   '(benchmark-init flymake-aspell consult orderless vertico pyvenv-auto age yaml-mode 2bit calc-prog-utils 2048-game 4clojure @ 0x0 0blayout 0xc julia-repl julia-mode pyvenv rust-mode flyspell borg whole-line-or-region utop use-package tuareg terraform-mode string-inflection sql-indent solarized-theme smartparens rainbow-delimiters q-mode merlin lua-mode kill-ring-search highlight-parentheses go-mode flimenu dockerfile-mode dash-functional clj-refactor cargo))
+   '(copilot-chat org-inline-pdfcomment sml-ts-mode uniline wollok-mode flycheck-clang-tidy clang-format jq-ts-mode cmake-ide telega consult-company company 750words benchmark-init flymake-aspell consult orderless vertico pyvenv-auto age yaml-mode 2bit calc-prog-utils 2048-game 4clojure @ 0x0 0blayout 0xc julia-repl julia-mode pyvenv rust-mode flyspell borg whole-line-or-region utop use-package tuareg terraform-mode string-inflection sql-indent solarized-theme smartparens rainbow-delimiters q-mode merlin lua-mode kill-ring-search highlight-parentheses go-mode flimenu dockerfile-mode dash-functional clj-refactor cargo))
  '(safe-local-variable-values
-   '((cider-ns-refresh-after-fn . "integrant.repl/resume")
+   '((cmake-ide-project-dir . "/path/to/project/dir")
+     (cmake-ide-build-dir . "/path/to/build/dir")
+     (cider-ns-refresh-after-fn . "integrant.repl/resume")
      (cider-ns-refresh-before-fn . "integrant.repl/suspend")
      (eval progn
            (add-to-list 'cider-jack-in-nrepl-middlewares "shadow.cljs.devtools.server.nrepl/middleware")
@@ -111,7 +113,7 @@
      (cider-repl-display-help-banner)
      (encoding . utf-8)
      (prompt-to-byte-compile)))
- '(telega-chat-folder-format "%I")
+ '(telega-chat-folder-format "%I" t)
  '(warning-suppress-types '((telega))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
