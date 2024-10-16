@@ -434,6 +434,7 @@
                        'telega-company-hashtag)
                  (when (telega-chat-bot-p telega-chatbuf--chat)
                    '(telega-company-botcmd))))
+    (global-whitespace-mode -1)
     (company-mode 1))
   (add-hook 'telega-chat-mode-hook 'my-telega-chat-mode)
   (add-hook 'telega-load-hook 'global-telega-squash-message-mode)

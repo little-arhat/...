@@ -21,7 +21,7 @@
     glog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --perl-regexp --author='^((?!teamcity).*)$'
     uglog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     lc = log ORIG_HEAD.. --stat --no-merges
-    addremove = !git add .; git ls-files --deleted xargs git rm
+    addremove = !git add . ; git ls-files --deleted xargs git rm
     changes = diff --name-status -r
     diffstat = diff --stat -r
     prune-all = !git remote | xargs -n 1 git remote prune
@@ -53,3 +53,5 @@
     protocol = https
 [http]
     sslverify = false
+[rerere]
+    enabled = true
