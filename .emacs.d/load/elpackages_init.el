@@ -152,7 +152,8 @@
   (ispell-dictionary "en_GB")
   (ispell-silently-savep t)
   :hook
-  ((text-mode . flymake-aspell-setup)))
+  (((text-mode
+     fundamental-mode) . flymake-aspell-setup)))
 
 
 ;;;;; project, vcs, etc
