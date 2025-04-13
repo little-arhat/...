@@ -201,7 +201,8 @@
   :hook
   ((lisp-mode . smartparens-strict-mode)
    (emacs-lisp-mode . smartparens-strict-mode)
-   (clojure-mode . smartparens-strict-mode))
+   (clojure-mode . smartparens-strict-mode)
+   (clojure-ts-mode . smartparens-strict-mode))
   :config
   (require 'smartparens-config)
   (show-smartparens-global-mode t)
@@ -463,3 +464,94 @@
   :config
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
+
+;;;; GPT/ai
+(use-package copilot
+  :custom
+  (copilot-indent-offset-warning-disable t)
+  :bind
+  (("C-x A c m" . copilot-mode))
+  :bind (:map copilot-mode-map
+              ("M-RET" . copilot-accept-completion)
+              ("M-n" . copilot-next-completion)
+              ("M-p" . copilot-previous-completion)
+              ("C-x A c c" . copilot-clear-overlay)))
+
+(use-package copilot-chat
+  :ensure t
+  :bind (("C-x A c x" . copilot-chat-display)))
+
+(use-package gptel
+  :bind (("C-h C-t" . gptel-send)  ;; C-u C-h RET for gptel-menu
+         ("C-h C-g" . gptel))
+  :config
+  (setq gptel-directives
+        '((default . "You are a large language model living in Emacs and a helpful assistant. Respond concisely.")
+          (programming . "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
+          (writing . "You are a large language model and a writing assistant. Respond concisely.")
+          (chat . "You are a large language model and a conversation partner. Respond concisely.")
+          (bug . "You are a large language model and a careful programmer. The supplied code doesn't work, or contains bugs. Describe each problem using only one sentence. Provide fixes without changing the old behavior.")))
+
+  (defun openai-api-key ()
+    (require 'gptel)
+    (gptel-api-key-from-auth-source "api.openai.com"))
+
+  (defun deepseek-api-key ()
+    (require 'gptel)
+    (gptel-api-key-from-auth-source "api.deepseek.com"))
+
+  (defun grok-api-key ()
+    (require 'gptel)
+    (gptel-api-key-from-auth-source "api.x.ai"))
+
+  ;; DeepSeek
+  (gptel-make-deepseek "DeepSeek"
+    :stream t
+    :key #'deepseek-api-key)
+
+  ;; Anthropic
+  (gptel-make-xai "Grok"
+    :stream t
+    :key #'grok-api-key)
+
+  (gptel-make-tool
+   :name "create_python_repl"
+   :function (lambda ()
+               (run-python nil t)
+               (pop-to-buffer (python-shell-get-buffer)))
+   :description "Create a new python repl for this session"
+   :args nil
+   :category "emacs")
+
+  (gptel-make-tool
+   :name "send_python_to_repl"
+   :function (lambda (code)
+               (python-shell-send-string code))
+   :args (list '(:name "code"
+                       :type string
+                       :description "python code to execute"))
+   :description "Send some python code to the python repl for this session and execute it"
+   :category "emacs")
+
+  (gptel-make-tool
+   :category "web"
+   :name "search"
+   :async t
+   :function (lambda (cb keyword)
+               (tavily-search-async cb keyword))
+   :description "Search the Internet; If you used any search results, be sure to include the references in your response."
+   :args (list '(:name "keyword"
+                       :type string
+                       :description "The keyword to search")))
+
+  (gptel-make-tool
+   :category "web"
+   :name "fetch_url_text"
+   :async t
+   :description "Fetch the Markdown contents from an HTML page specified by its URL"
+   :args (list '(:name "url"
+                       :type string
+                       :description "The url of the web page"))
+   :function (lambda (cb url)
+               (fetch-url-text-async cb url))))

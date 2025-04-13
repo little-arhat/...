@@ -1,7 +1,7 @@
 ;; unsets
 (global-unset-key (kbd "C-q"))
 
-(global-set-key (kbd "C-_") 'undo)
+(global-set-key (kbd "C--") 'undo)
 (global-set-key (kbd "C-.") 'undo-redo)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "M-?") 'help-command)
