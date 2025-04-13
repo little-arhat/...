@@ -397,10 +397,29 @@ function day() {
 
 alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias c++='clang++ -std=c++23'
+
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+
 # local specific aliases and settings
 # local settings can override some settings
 if [ -f ~/.zshenv ]; then
     source ~/.zshenv
+fi
+
+# FZF (after zshenv to get brew paths)
+FZF_CELLAR="$(brew --cellar fzf)"
+FZF_PREFIX="$(readlink -f $(brew --prefix fzf))"
+# Auto-completion
+if [[ $- == *i* ]]; then
+  source "${FZF_PREFIX}/shell/completion.zsh" 2> /dev/null
+fi
+# Key bindings
+source "${FZF_PREFIX}/shell/key-bindings.zsh"
+# Use fd
+if command -v fd > /dev/null; then
+  export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND='fd --type d --strip-cwd-prefix --hidden --follow --exclude .git'
 fi
 
 # for emacs' tramp
