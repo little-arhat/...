@@ -3,6 +3,8 @@
     email = sokolov.r.v@gmail.com
 [includeIf "gitdir:~/prj/w/"]
     path = .gitconfig-work
+[includeIf "gitdir:~/code/w/"]
+    path = .gitconfig-work
 [alias]
     ci = commit
     st = status -s

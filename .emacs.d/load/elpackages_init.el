@@ -114,6 +114,8 @@
               )
   :config
   (add-to-list 'eglot-server-programs '((c++-ts-mode c-ts-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '((python-ts-mode python-mode) "pyright-langserver" "--stdio"))
+
   (setq eglot-inlay-hints-mode nil)
   :preface
   (defun eglot-disable-in-cider ()
