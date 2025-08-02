@@ -180,6 +180,9 @@
   :init
   (setq projectile-enable-caching t)
   (setq projectile-completion-system 'default)
+  :config
+  (setq projectile-project-root-files-bottom-up
+        (append projectile-project-root-files-bottom-up '(".svn")))
   :bind-keymap ("C-c p" . projectile-command-map)
   :bind (("C-c i" . projectile-find-other-file)))
 
