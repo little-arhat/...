@@ -20,6 +20,7 @@
 (show-paren-mode 1)
 (global-subword-mode 1)
 (setq save-abbrevs nil)
+(setq vc-handled-backends '(SVN Git))
 
 (which-function-mode)
 

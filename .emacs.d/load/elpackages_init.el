@@ -144,6 +144,8 @@
               ("C-c C-p" . flymake-goto-prev-error))
   :config
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+  (setq flymake-indicator-type nil)
+  (setq flymake-fringe-indicator-position nil)
   :hook ((prog-mode . flymake-mode)
          (text-mode . flymake-mode)))
 
@@ -489,8 +491,8 @@
   :bind (("C-x A c x" . copilot-chat-display)))
 
 (use-package gptel
-  :bind (("C-h C-t" . gptel-send)  ;; C-u C-h RET for gptel-menu
-         ("C-h C-g" . gptel))
+  :bind (("C-h C-g" . gptel-send)  ;; C-u C-h RET for gptel-menu
+         ("C-h C-t" . gptel))
   :config
   (setq gptel-directives
         '((default . "You are a large language model living in Emacs and a helpful assistant. Respond concisely.")
@@ -561,3 +563,13 @@
                        :description "The url of the web page"))
    :function (lambda (cb url)
                (fetch-url-text-async cb url))))
+
+(use-package claude-code-ide :ensure t
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :bind (:map global-map
+              ("C-h C-t" . claude-code-ide-menu))
+  :config
+  (claude-code-ide-emacs-tools-setup)
+  (setq claude-code-ide-diagnostics-backend 'flymake)
+  (setq claude-code-ide-window-side 'bottom
+        claude-code-ide-window-height 10))
