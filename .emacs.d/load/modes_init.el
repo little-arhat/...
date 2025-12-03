@@ -26,10 +26,10 @@
 
 ;; TODO: highilight TODO et al for al modes
 
-(require 'linum)
-(set-face-attribute 'linum nil
-                    :background "gray"
-                    :foreground "red")
+;; (require 'linum)
+;; (set-face-attribute 'linum nil
+;;                     :background "gray"
+;;                     :foreground "red")
 (add-hook 'write-file-functions 'delete-trailing-whitespace)
 
 ;; I hate blinking

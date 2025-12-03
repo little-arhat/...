@@ -461,6 +461,7 @@
   (setq telega-chat-send-disable-webpage-preview t)
   (setq telega-chat-fill-column 104)
   (setq telega-chat-folder-format "%I")
+  ;; (setq telega-chat-folders-insexp "%I")
   (setq scroll-margin 3)
   (setq telega-root-default-view-function 'telega-view-two-lines)
   (setq telega-vvnote-video-cmd
