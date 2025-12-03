@@ -89,19 +89,21 @@
   (global-whitespace-mode t))
 
 
-;;;;; flymake, spell, lsp, etc.
 (use-package eglot
-  :ensure t
-  :hook ((( clojure-mode
-            clojurec-mode
-            clojurescript-mode
-            java-mode scala-mode rust-mode
-            rust-ts-mode
-            python-mode
-            python-ts-mode
-            c-mode
-            c-ts-mode
-            c++-ts-mode)
+  :ensure nil
+  :defer t
+  :hook (((
+           ;; broken in clojure :/
+           ;; clojure-ts-mode
+           ;; clojurec-mode
+           ;; clojurescript-mode
+           java-mode scala-mode rust-mode
+           rust-ts-mode
+           python-mode
+           python-ts-mode
+           c-mode
+           c-ts-mode
+           c++-ts-mode)
           . eglot-ensure)
          ((cider-mode eglot-managed-mode) . eglot-disable-in-cider)
          (eglot-managed-mode . (lambda () (eglot-inlay-hints-mode -1)))
@@ -116,36 +118,58 @@
   (add-to-list 'eglot-server-programs '((c++-ts-mode c-ts-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((python-ts-mode python-mode) "pyright-langserver" "--stdio"))
 
-  (setq eglot-inlay-hints-mode nil)
+  (setq eglot-inlay-hints-mode -1)
   :preface
   (defun eglot-disable-in-cider ()
-    (when (eglot-managed-p)
-      (if (bound-and-true-p cider-mode)
-          (progn
-            (remove-hook 'completion-at-point-functions 'eglot-completion-at-point t)
-            (remove-hook 'xref-backend-functions 'eglot-xref-backend t))
-        (add-hook 'completion-at-point-functions 'eglot-completion-at-point nil t)
-        (add-hook 'xref-backend-functions 'eglot-xref-backend nil t))))
+  "Disable Eglot completion and xref when Cider is active in the same buffer."
+  (when (and (fboundp 'eglot-managed-p)   ; <-- safe guard, in case of early call
+             (eglot-managed-p))
+    (if (bound-and-true-p cider-mode)
+        (progn
+          (remove-hook 'completion-at-point-functions 'eglot-completion-at-point t)
+          (remove-hook 'xref-backend-functions 'eglot-xref-backend t))
+      (add-hook 'completion-at-point-functions 'eglot-completion-at-point nil t)
+      (add-hook 'xref-backend-functions 'eglot-xref-backend nil t))))
+
   :custom
   (eldoc-echo-area-use-multiline-p nil)
   (eglot-autoshutdown t)
+  (eglot-sync-connect nil)
   (eglot-events-buffer-size 0)
   (eglot-extend-to-xref nil)
   (eglot-ignored-server-capabilities
    '(:documentHighlightProvider
      :colorProvider
-     :foldingRangeProvider))
-  (eglot-stay-out-of '(yasnippet)))
+     :foldingRangeProvider)))
+
 
 (use-package flymake
-  :custom (flymake-mode-line-lighter "ƒ")
+  :ensure nil
+  :defer t
+  :custom
+  (flymake-mode-line-lighter "ƒ")
+  (flymake-indicator-type nil)
+
+  (flymake-fringe-indicator-position nil)
+  (flymake-margin-indicator-position nil)
+  (flymake-error-bitmap '(empty . empty))
+  (flymake-warning-bitmap '(empty . empty))
+  (flymake-note-bitmap '(empty . empty))
+
   :bind (:map flymake-mode-map
               ("C-c C-x" . flymake-goto-next-error)
               ("C-c C-p" . flymake-goto-prev-error))
   :config
+  (push '(before-string . nil) (get :note 'flymake-overlay-control))
+  (push '(before-string . nil) (get :warning 'flymake-overlay-control))
+  (push '(before-string . nil) (get :error 'flymake-overlay-control))
+
+  (defun my/flymake-clean-overlays ()
+    (remove-overlays nil nil 'category 'flymake-indicator)
+    (remove-overlays nil nil 'category 'flymake-overlay))
+  (add-hook 'flymake-mode-hook #'my/flymake-clean-overlays)
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-  (setq flymake-indicator-type nil)
-  (setq flymake-fringe-indicator-position nil)
+
   :hook ((prog-mode . flymake-mode)
          (text-mode . flymake-mode)))
 
@@ -196,7 +220,7 @@
   :hook ((python-ts-mode
           emacs-lisp-mode
           rust-ts-mode
-          clojure-mode
+          clojure-ts-mode
           text-mode) . highlight-parentheses-mode))
 
 (use-package rainbow-delimiters
@@ -248,7 +272,7 @@
               ("C-c M-r" . cider-repl-previous-matching-input)
               ("C-c M-s" . cider-repl-next-matching-input))
   :hook
-  ((clojure-mode . cider-mode)
+  ((clojure-ts-mode . cider-mode)
    (cider-repl-mode . smartparens-mode))
   :config
   (setq
@@ -256,13 +280,13 @@
    cider-repl-history-file "~/.emacs.d/cider-history"
    cider-repl-display-help-banner nil))
 
-(use-package clojure-mode
+(use-package clojure-ts-mode
   :defer t
   :commands put-clojure-indent
-  :mode (("\\.boot\\'" . clojure-mode)
-         ("\\.edn\\'" . clojure-mode)
-         ("\\.clj\\'" . clojure-mode)
-         ("deps.edn" . clojure-mode))
+  :mode (("\\.boot\\'" . clojure-ts-mode)
+         ("\\.edn\\'" . clojure-ts-mode)
+         ("\\.clj\\'" . clojure-ts-mode)
+         ("deps.edn" . clojure-ts-mode))
   :init
   (setq clojure-indent-style :always-indent)
   (setq clojure-thread-all-but-last t)
